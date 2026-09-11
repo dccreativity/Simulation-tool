@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadrat &amp; Transect Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+
+  <header class="masthead">
+    <div class="masthead-text">
+      <p class="eyebrow">Ecological sampling simulator</p>
+      <h1>Quadrat &amp; Transect Lab</h1>
+      <p class="standfirst">Sample a virtual habitat to estimate the <strong>distribution</strong> and
+        <strong>abundance</strong> of its species &mdash; then check your estimate against the real
+        population, which only the simulation knows.</p>
+    </div>
+    <div class="masthead-badge" aria-hidden="true">
+      <svg viewBox="0 0 72 72" role="presentation">
+        <rect x="6" y="6" width="60" height="60" rx="2" class="bx-frame"/>
+        <g class="bx-wire">
+          <line x1="18" y1="6" x2="18" y2="66"/><line x1="30" y1="6" x2="30" y2="66"/>
+          <line x1="42" y1="6" x2="42" y2="66"/><line x1="54" y1="6" x2="54" y2="66"/>
+          <line x1="6" y1="18" x2="66" y2="18"/><line x1="6" y1="30" x2="66" y2="30"/>
+          <line x1="6" y1="42" x2="66" y2="42"/><line x1="6" y1="54" x2="66" y2="54"/>
+        </g>
+        <circle cx="23" cy="35" r="4.5" class="bx-p1"/><circle cx="47" cy="22" r="3.4" class="bx-p2"/>
+        <circle cx="52" cy="50" r="4" class="bx-p1"/><circle cx="33" cy="57" r="3" class="bx-p2"/>
+      </svg>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-survey" aria-controls="view-survey" aria-selected="true" class="tab is-on">Survey</button>
+    <button role="tab" id="tab-analysis" aria-controls="view-analysis" aria-selected="false" class="tab">Analysis</button>
+    <button role="tab" id="tab-investigate" aria-controls="view-investigate" aria-selected="false" class="tab">Investigate</button>
+    <button role="tab" id="tab-method" aria-controls="view-method" aria-selected="false" class="tab">Method notes</button>
+  </nav>
+
+  <!-- ───────────────────────────── SURVEY ───────────────────────────── -->
+  <section id="view-survey" role="tabpanel" aria-labelledby="tab-survey" class="view">
+
+    <div class="survey-grid">
+
+      <!-- Site view -->
+      <section class="card card-site" aria-labelledby="site-h">
+        <header class="card-head">
+          <h2 id="site-h">The sample area</h2>
+          <p class="card-sub" id="siteMeta">&nbsp;</p>
+        </header>
+        <div class="canvas-wrap">
+          <canvas id="siteCanvas" width="1320" height="1320" aria-label="Map of the sample area with tape measures along two edges"></canvas>
+          <p class="canvas-hint" id="siteHint">Tape measures run along two edges, at right angles.</p>
+        </div>
+        <ul class="legend" id="siteLegend"></ul>
+      </section>
+
+      <!-- Instrument column -->
+      <div class="instrument-col">
+
+        <section class="card step" aria-labelledby="setup-h">
+          <header class="card-head">
+            <p class="step-no">Step 1</p>
+            <h2 id="setup-h">Set up the site</h2>
+          </header>
+          <div class="field-grid">
+            <label class="field">
+              <span class="field-label">Habitat</span>
+              <select id="habitat"></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Quadrat frame</span>
+              <select id="quadratSide">
+                <option value="0.25">0.25 m &times; 0.25 m &mdash; 0.0625 m&sup2;</option>
+                <option value="0.5" selected>0.5 m &times; 0.5 m &mdash; 0.25 m&sup2;</option>
+                <option value="1">1 m &times; 1 m &mdash; 1 m&sup2;</option>
+              </select>
+            </label>
+            <label class="field field-seed">
+              <span class="field-label">Site code <span class="field-note">same code = same site for the whole class</span></span>
+              <span class="seed-row">
+                <input id="seed" type="text" spellcheck="false" autocomplete="off" value="HEDGE-07">
+                <button id="newSite" class="btn btn-ghost" type="button" title="Generate a different site">New site</button>
+              </span>
+            </label>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="reveal">
+            <span>Reveal the true values <span class="field-note">teacher mode &mdash; shows the answer the simulation is hiding</span></span>
+          </label>
+        </section>
+
+        <section class="card step" aria-labelledby="method-h">
+          <header class="card-head">
+            <p class="step-no">Step 2</p>
+            <h2 id="method-h">Choose a sampling method</h2>
+          </header>
+          <div class="segmented" role="radiogroup" aria-labelledby="method-h">
+            <label><input type="radio" name="method" id="m-random" value="random" checked><span>Random quadrats</span></label>
+            <label><input type="radio" name="method" id="m-transect" value="transect"><span>Belt transect</span></label>
+            <label><input type="radio" name="method" id="m-choice" value="choice"><span>My own spots</span></label>
+          </div>
+          <p class="method-blurb" id="methodBlurb"></p>
+        </section>
+
+        <section class="card step" aria-labelledby="place-h">
+          <header class="card-head">
+            <p class="step-no">Step 3</p>
+            <h2 id="place-h">Place the quadrat</h2>
+          </header>
+
+          <div id="panel-random" class="method-panel">
+            <div class="rng">
+              <div class="rng-readout">
+                <div class="coord">
+                  <span class="coord-axis">x</span>
+                  <span class="coord-val" id="coordX">&mdash;</span>
+                  <span class="coord-unit">m along</span>
+                </div>
+                <div class="coord">
+                  <span class="coord-axis">y</span>
+                  <span class="coord-val" id="coordY">&mdash;</span>
+                  <span class="coord-unit">m up</span>
+                </div>
+              </div>
+              <div class="rng-actions">
+                <button id="rollBtn" class="btn btn-primary" type="button">Generate random coordinates</button>
+                <button id="placeBtn" class="btn" type="button" disabled>Place quadrat here</button>
+              </div>
+            </div>
+            <p class="note" id="rollNote">The random number generator picks a pair of coordinates off the two
+              tape measures. Nobody chooses the spot, so the sample is unbiased.</p>
+          </div>
+
+          <div id="panel-transect" class="method-panel" hidden>
+            <div class="transect-fields">
+              <label class="field mini"><span class="field-label">Start x</span><input id="tStartX" type="number" step="0.5" min="0"></label>
+              <label class="field mini"><span class="field-label">Start y</span><input id="tStartY" type="number" step="0.5" min="0"></label>
+              <label class="field mini"><span class="field-label">End x</span><input id="tEndX" type="number" step="0.5" min="0"></label>
+              <label class="field mini"><span class="field-label">End y</span><input id="tEndY" type="number" step="0.5" min="0"></label>
+              <label class="field mini"><span class="field-label">Interval</span>
+                <select id="tInterval">
+                  <option value="1">every 1 m</option>
+                  <option value="2" selected>every 2 m</option>
+                  <option value="2.5">every 2.5 m</option>
+                  <option value="4">every 4 m</option>
+                </select>
+              </label>
+            </div>
+            <div class="rng-actions">
+              <button id="layBtn" class="btn btn-primary" type="button">Lay the transect</button>
+              <button id="tPreset" class="btn btn-ghost" type="button">Use recommended line</button>
+            </div>
+            <p class="note" id="transectNote"></p>
+            <div class="stations" id="stationList"></div>
+          </div>
+
+          <div id="panel-choice" class="method-panel" hidden>
+            <p class="note"><strong>Click anywhere on the map</strong> to drop the quadrat where you like.
+              This is how <em>not</em> to sample &mdash; use it to prove to yourself that choosing your own
+              spots biases the result, then compare it with random sampling in
+              <button class="linkish" type="button" data-goto="investigate">Investigate</button>.</p>
+          </div>
+        </section>
+
+        <section class="card step" aria-labelledby="record-h">
+          <header class="card-head">
+            <p class="step-no">Step 4</p>
+            <h2 id="record-h">Record what is inside</h2>
+            <p class="card-sub" id="zoomMeta">Place a quadrat first.</p>
+          </header>
+
+          <div class="zoom-wrap">
+            <canvas id="zoomCanvas" width="900" height="900" aria-label="Close-up of the quadrat, divided into 25 small squares"></canvas>
+            <p class="canvas-hint" id="zoomHint">&nbsp;</p>
+          </div>
+
+          <div class="tally-mode">
+            <div class="segmented small" role="radiogroup" aria-label="What to record">
+              <label><input type="radio" name="tmode" id="modeCount" value="count" checked><span>Count individuals</span></label>
+              <label><input type="radio" name="tmode" id="modeCover" value="cover"><span>Estimate % cover</span></label>
+            </div>
+            <label class="field mini cover-pick" id="coverPick" hidden>
+              <span class="field-label">Cover for</span>
+              <select id="coverSpecies"></select>
+            </label>
+          </div>
+
+          <ul class="tally" id="tallyList"></ul>
+
+          <div class="record-actions">
+            <button id="recordBtn" class="btn btn-primary" type="button" disabled>Record this sample</button>
+            <button id="checkBtn" class="btn btn-ghost" type="button" disabled>Check my count</button>
+            <button id="autoBtn" class="btn btn-ghost" type="button" disabled title="Fill in the true values for this quadrat">Auto-fill</button>
+          </div>
+          <p class="feedback" id="feedback" hidden></p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Record sheet -->
+    <section class="card card-sheet" aria-labelledby="sheet-h">
+      <header class="card-head row">
+        <div>
+          <p class="step-no">Step 5</p>
+          <h2 id="sheet-h">Record sheet</h2>
+          <p class="card-sub" id="sampleCount">No samples yet.</p>
+        </div>
+        <div class="sheet-actions">
+          <button id="quickBtn" class="btn btn-ghost" type="button">Auto-survey 10 random quadrats</button>
+          <button id="csvBtn" class="btn btn-ghost" type="button">Get data as CSV</button>
+          <button id="clearSheetBtn" class="btn btn-ghost danger" type="button">Clear sheet</button>
+        </div>
+      </header>
+      <p class="banner" id="sheetBanner" hidden></p>
+      <div id="csvPanel" class="csv-panel" hidden>
+        <div class="csv-head">
+          <p class="field-label">Your data, comma separated &mdash; paste it into a spreadsheet</p>
+          <div class="sheet-actions">
+            <button id="csvCopy" class="btn btn-ghost" type="button">Copy</button>
+            <button id="csvClose" class="btn btn-ghost" type="button">Close</button>
+          </div>
+        </div>
+        <textarea id="csvText" readonly rows="7" spellcheck="false"></textarea>
+      </div>
+      <div class="table-scroll">
+        <table class="sheet" id="sheet">
+          <thead id="sheetHead"></thead>
+          <tbody id="sheetBody"></tbody>
+          <tfoot id="sheetFoot"></tfoot>
+        </table>
+      </div>
+    </section>
+  </section>
+
+  <!-- ───────────────────────────── ANALYSIS ───────────────────────────── -->
+  <section id="view-analysis" role="tabpanel" aria-labelledby="tab-analysis" class="view" hidden>
+    <div id="analysisEmpty" class="empty">
+      <h2>Nothing to analyse yet</h2>
+      <p>Record some quadrats on the <button class="linkish" type="button" data-goto="survey">Survey</button> tab
+        &mdash; ten is the usual minimum &mdash; and the calculations appear here.</p>
+    </div>
+    <div id="analysisBody" hidden>
+      <section class="card" aria-labelledby="calc-h">
+        <header class="card-head">
+          <h2 id="calc-h">From quadrats to a population estimate</h2>
+          <p class="card-sub" id="calcSub"></p>
+        </header>
+        <p class="banner" id="calcCaveat" hidden></p>
+        <div id="calcPanel" class="calc-grid"></div>
+      </section>
+
+      <div class="chart-pair">
+        <section class="card" aria-labelledby="spread-h">
+          <header class="card-head">
+            <h2 id="spread-h">How much did your quadrats disagree?</h2>
+            <p class="card-sub" id="spreadSub"></p>
+          </header>
+          <div class="chart-host" id="chartSpread"></div>
+        </section>
+        <section class="card" aria-labelledby="conv-h">
+          <header class="card-head">
+            <h2 id="conv-h">Does the estimate settle down?</h2>
+            <p class="card-sub">The running estimate after each quadrat you recorded, in order.</p>
+          </header>
+          <div class="chart-host" id="chartConverge"></div>
+        </section>
+      </div>
+
+      <section class="card" id="transectSection" aria-labelledby="prof-h" hidden>
+        <header class="card-head">
+          <h2 id="prof-h">Distribution along the transect</h2>
+          <p class="card-sub" id="profSub"></p>
+        </header>
+        <div class="chart-host tall" id="chartProfile"></div>
+        <h3 class="sub-h">Kite diagram</h3>
+        <p class="card-sub">The standard way to present transect data: each species' abundance is drawn
+          mirrored about its own baseline, so the shape of its zone is easy to see.</p>
+        <div class="chart-host tall" id="chartKite"></div>
+      </section>
+
+      <section class="card" aria-labelledby="div-h">
+        <header class="card-head">
+          <h2 id="div-h">Diversity and accuracy</h2>
+        </header>
+        <div class="two-col">
+          <div id="diversityPanel"></div>
+          <div id="accuracyPanel"></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────── INVESTIGATE ───────────────────────────── -->
+  <section id="view-investigate" role="tabpanel" aria-labelledby="tab-investigate" class="view" hidden>
+    <section class="card" aria-labelledby="inv-h">
+      <header class="card-head">
+        <h2 id="inv-h">How many quadrats, and does it matter where you put them?</h2>
+        <p class="card-sub">One survey tells you one answer. This repeats the whole survey
+          <strong>300 times</strong> for every sample size from 1 to 30 quadrats, using three different
+          ways of choosing where the quadrat goes, and shows the range of answers each one produces.</p>
+      </header>
+      <div class="inv-controls">
+        <label class="field mini"><span class="field-label">Species</span><select id="invSpecies"></select></label>
+        <button id="invRun" class="btn btn-primary" type="button">Run 27,000 virtual surveys</button>
+        <p class="note" id="invNote">The dashed line is the true value for this site.</p>
+      </div>
+      <div class="chart-host tall" id="chartInvestigate"></div>
+      <div id="invReadout" class="inv-readout"></div>
+    </section>
+  </section>
+
+  <!-- ───────────────────────────── METHOD ───────────────────────────── -->
+  <section id="view-method" role="tabpanel" aria-labelledby="tab-method" class="view" hidden>
+    <div class="prose">
+      <h2>What you are measuring</h2>
+      <dl class="defs">
+        <dt>Distribution</dt>
+        <dd>Where the organisms are. The ground under a tree often carries little grass &mdash; that is a
+          statement about distribution.</dd>
+        <dt>Abundance</dt>
+        <dd>How many there are. For organisms you can pick out individually, abundance is a
+          <strong>count</strong>. For a carpet of grass, moss or seaweed, where individuals cannot be told
+          apart, abundance is a <strong>percentage cover</strong>.</dd>
+      </dl>
+
+      <h2>The quadrat</h2>
+      <p>A square frame of known area laid on the ground; you record only what lies inside it. The frames in
+        this lab are strung into a 5 &times; 5 grid, so each small square is <strong>4%</strong> of the
+        quadrat &mdash; count the small squares a species more than half fills, multiply by four, and you
+        have its percentage cover.</p>
+      <p class="rule-box"><strong>The boundary rule used here:</strong> an individual counts if its
+        <em>centre</em> lies inside the frame. Agree a rule before you start and stick to it, or two people
+        surveying the same quadrat will get different answers.</p>
+
+      <h2>Random sampling &mdash; and why it has to be random</h2>
+      <ol>
+        <li>Lay two tape measures at right angles along the edges of the area, making a pair of axes.</li>
+        <li>Use a random number generator to get a pair of coordinates.</li>
+        <li>Put the quadrat at those coordinates and record what is inside.</li>
+        <li>Repeat. <strong>Ten quadrats is the usual minimum</strong>; a clumped species needs more.</li>
+      </ol>
+      <p>The generator, not you, picks the spot. The moment a person chooses &mdash; drawn to the
+        interesting patch, or to the easy walk &mdash; the sample stops representing the area and the
+        estimate is <strong>biased</strong>. The <em>My own spots</em> method and the
+        <em>Investigate</em> tab let you measure that bias for yourself.</p>
+
+      <h2>Estimating the whole population</h2>
+      <p>A quadrat is a known fraction of the area, so scaling up is arithmetic:</p>
+      <p class="formula">mean number per quadrat &times; (total area &divide; area of one quadrat) = estimated population</p>
+      <p>With a 0.5 m &times; 0.5 m quadrat (0.25 m&sup2;) on a 20 m &times; 20 m field (400 m&sup2;), one
+        quadrat is 1/1600 of the field. A mean of 2.4 daisies per quadrat gives
+        2.4 &times; 1600 = <strong>3,840 daisies</strong>. For percentage cover there is nothing to scale:
+        the mean percentage cover of your quadrats <em>is</em> the estimate for the whole field.</p>
+
+      <h2>Transects &mdash; sampling a gradient</h2>
+      <p>When abundance changes across an area rather than varying at random, random sampling hides the
+        pattern in an average. Instead, run a line &mdash; a <strong>transect</strong> &mdash; along the
+        gradient and place quadrats at regular intervals: across a footpath, up a shore, out from the trunk
+        of a tree. This is <strong>systematic</strong> sampling, not random, and that is deliberate: you
+        want the samples spread evenly along the gradient.</p>
+      <ul>
+        <li><strong>Line transect</strong> &mdash; record only the organisms touching the line itself.</li>
+        <li><strong>Belt transect</strong> &mdash; record a continuous band along the line.</li>
+        <li><strong>Interrupted belt transect</strong> &mdash; a quadrat at fixed intervals. This is what the
+          lab builds, and what most fieldwork uses.</li>
+      </ul>
+      <p>Results go on a line graph of abundance against distance, or a <strong>kite diagram</strong>.
+        On a flat habitat, such as the mown lawn in this lab, a transect shows a flat profile &mdash; which
+        is itself the answer: there is no gradient, so use random quadrats.</p>
+
+      <h2>The ACFOR scale</h2>
+      <p>Shore surveys often record abundance on a quick descriptive scale instead of counting:
+        <strong>A</strong>bundant, <strong>C</strong>ommon, <strong>F</strong>requent,
+        <strong>O</strong>ccasional, <strong>R</strong>are. It is fast and needs no counting, but it is
+        subjective and you cannot do much arithmetic with it. This lab shows the ACFOR band beside the
+        percentage cover on the rocky shore so you can see how they line up.</p>
+
+      <h2>Where this simulation is honest, and where it is not</h2>
+      <ul>
+        <li><strong>Honest:</strong> the habitat has a real, fixed population that the sampling does not
+          know about, so your sampling error is genuine. Random coordinates are genuinely random, clumped
+          species are genuinely clumped, and the percentage cover you read off the grid really is what is
+          drawn inside the frame.</li>
+        <li><strong>Not honest:</strong> no weather, no trampling your own transect, no plants that are hard
+          to tell apart, no time pressure, and the frame always lands flat. Real fieldwork is where those
+          turn up &mdash; this is the rehearsal.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Built for biology and environmental science fieldwork practice. Every habitat is generated from its
+      site code, so a class entering the same code samples the identical site.</p>
+  </footer>
+</div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
