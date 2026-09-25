@@ -60,6 +60,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               transition={{ duration: 0.2 }}
               className={cn(
                 'pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-2xl border border-line bg-paper px-4 py-3 shadow-lift',
+                // On phones and tablets only the newest message shows, so the map stays clear.
+                'max-lg:[&:not(:last-child)]:hidden max-lg:py-2.5',
               )}
               role="status"
             >
