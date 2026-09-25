@@ -35,7 +35,7 @@ export function TopBar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line/80 bg-canvas/90 backdrop-blur-md">
+    <header className="no-print sticky top-0 z-30 border-b border-line/80 bg-canvas/90 backdrop-blur-md">
       {/* Desktop utilities */}
       <div className="hidden h-16 items-center justify-between gap-4 px-6 lg:flex xl:px-8">
         <SyncIndicator />

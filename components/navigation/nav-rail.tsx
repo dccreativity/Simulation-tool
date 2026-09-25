@@ -10,7 +10,7 @@ import { NAV_ITEMS, isActive } from './nav-items';
 export function NavRail() {
   const pathname = usePathname();
   return (
-    <aside className="on-dark sticky top-0 hidden h-dvh shrink-0 flex-col bg-navy text-cream lg:flex lg:w-[92px] xl:w-[228px]" aria-label="Main">
+    <aside className="no-print on-dark sticky top-0 hidden h-dvh shrink-0 flex-col bg-navy text-cream lg:flex lg:w-[92px] xl:w-[228px]" aria-label="Main">
       <div className="flex h-20 items-center justify-center px-4 xl:justify-start xl:px-6">
         <Brand className="hidden xl:flex" />
         <Brand compact className="xl:hidden" />
