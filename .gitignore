@@ -1,3 +1,44 @@
-node_modules/
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# testing
+/coverage
+/test-results
+/playwright-report
+/blob-report
+
+# next.js
+/.next/
+/out/
+/build
+/dist
+
+# misc
 .DS_Store
-dist/
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files — never commit secrets; .env.example documents the variables
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# supabase cli local state
+/supabase/.temp
+/supabase/.branches
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# local scratch scripts
+*.tmp.mjs

@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/*
+ * Eco Field Lab design tokens.
+ * Core palette: navy #031926 · teal #468189 · sage #77ACA2 · pale sage #9DBEBB · cream #F4E9CD.
+ * Tints and semantic colours are derived from it and kept muted. Text/background
+ * pairs meet WCAG AA (≥ 4.5:1) — e.g. ink-3 on paper is 5.3:1; white on teal-600 is 5.3:1.
+ */
+@theme {
+  --font-sans: Arial, "Helvetica Neue", Helvetica, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-navy: #031926;
+  --color-navy-800: #0a2533;
+  --color-navy-700: #14384a;
+  --color-navy-600: #24495a;
+
+  --color-teal: #468189;
+  --color-teal-700: #2f6168;
+  --color-teal-600: #3b7279;
+  --color-teal-100: #d9e8e8;
+  --color-teal-50: #ecf4f3;
+
+  --color-sage: #77aca2;
+  --color-sage-200: #cfe2dd;
+  --color-sage-100: #e3eeeb;
+
+  --color-pale: #9dbebb;
+  --color-pale-100: #e5efee;
+
+  --color-cream: #f4e9cd;
+  --color-cream-100: #f9f2e1;
+  --color-canvas: #f7f2e4;
+  --color-paper: #fffcf4;
+  --color-line: #e6dcc3;
+  --color-line-strong: #d4c7a7;
+
+  --color-ink: #031926;
+  --color-ink-2: #2b4250;
+  --color-ink-3: #56696f;
+
+  --color-warn: #7d5210;
+  --color-warn-bg: #f8ecd2;
+  --color-warn-line: #e5cf9c;
+  --color-danger: #8f412e;
+  --color-danger-bg: #f6e2da;
+  --color-danger-line: #e5bfb1;
+  --color-success: #2f6d50;
+  --color-success-bg: #e2efe6;
+  --color-success-line: #b9d6c3;
+
+  --radius-card: 1.125rem;
+  --shadow-card: 0 1px 2px rgb(3 25 38 / 0.04), 0 6px 18px -10px rgb(3 25 38 / 0.14);
+  --shadow-lift: 0 2px 6px rgb(3 25 38 / 0.06), 0 18px 36px -18px rgb(3 25 38 / 0.3);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  @keyframes shimmer {
+    0% { background-position: -300px 0; }
+    100% { background-position: 300px 0; }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-teal-600);
+    outline-offset: 2px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-cream);
+  }
+  ::selection {
+    background: var(--color-sage-200);
+  }
+  button, [role="button"], summary {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  input, select, textarea {
+    font: inherit;
+  }
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+@utility skeleton {
+  background-color: var(--color-cream-100);
+  background-image: linear-gradient(90deg, transparent 0, rgb(255 255 255 / 0.65) 50%, transparent 100%);
+  background-size: 300px 100%;
+  background-repeat: no-repeat;
+  animation: var(--animate-shimmer);
+  border-radius: 0.5rem;
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  background: var(--color-navy);
+  color: var(--color-cream);
+  transition: top 0.15s;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* The field map: canvas below, SVG overlay on top. */
+.field-map {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  html, body { background: #fff; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  main { padding: 0 !important; }
+  .print-card { box-shadow: none !important; border-color: #ccc !important; break-inside: avoid; }
+}
+.print-only { display: none; }
