@@ -176,7 +176,7 @@ export function TransectProfileChart({
               ) : null
             }
           />
-          <Legend verticalAlign="top" height={30} iconType="plainline" wrapperStyle={{ fontSize: 11, color: '#2b4250' }} />
+          <Legend verticalAlign="top" iconType="plainline" wrapperStyle={{ fontSize: 11, color: "#2b4250", paddingBottom: 8, lineHeight: "18px" }} />
           {series.map((s, i) => (
             <Line
               key={s.key}

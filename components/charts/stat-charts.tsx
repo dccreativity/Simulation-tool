@@ -124,7 +124,7 @@ export function BoxPlot({ groups, xLabel }: { groups: BoxGroup[]; xLabel: string
 export function SpreadDotPlot({ values, stats, xLabel, color = '#14989e' }: { values: number[]; stats: Descriptive; xLabel: string; color?: string }) {
   const [ref, width] = useElementWidth<HTMLDivElement>();
   const sd = Number.isFinite(stats.sd) ? stats.sd : 0;
-  const lo0 = Math.min(stats.min, stats.mean - 2 * sd);
+  const lo0 = stats.min >= 0 ? Math.max(0, Math.min(stats.min, stats.mean - 2 * sd)) : Math.min(stats.min, stats.mean - 2 * sd);
   const hi0 = Math.max(stats.max, stats.mean + 2 * sd);
   const ticks = niceTicks(lo0, hi0, 7);
   const lo = ticks[0];
@@ -182,7 +182,7 @@ export function SpreadDotPlot({ values, stats, xLabel, color = '#14989e' }: { va
         {placed.map((p, i) => (
           <motion.circle
             key={i}
-            initial={{ opacity: 0, cy: baseY - dotR - 12 }}
+            initial={{ opacity: 0, cx: p.cx, cy: baseY - dotR - 12 }}
             animate={{ opacity: 1, cy: baseY - dotR - 2 - p.level * dotR * 2.1, cx: p.cx }}
             transition={{ duration: 0.35, delay: Math.min(i, 30) * 0.012 }}
             r={dotR}

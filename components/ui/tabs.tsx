@@ -152,7 +152,7 @@ export function Segmented<T extends string | number>({
             onClick={() => onChange(o.value)}
             onKeyDown={(e) => onKey(e, i)}
             className={cn(
-              'flex-1 rounded-lg font-medium transition-colors',
+              'flex-1 rounded-lg font-medium whitespace-nowrap transition-colors',
               size === 'sm' ? 'h-8 px-2.5 text-[0.8rem]' : 'h-10 px-3.5 text-sm',
               on
                 ? dark
