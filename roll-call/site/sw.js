@@ -1,5 +1,5 @@
 // Keeps the roll call app available with no internet. Live sync calls (Supabase) are never cached.
-const CACHE = 'bhutan-roll-call-v3';
+const CACHE = 'bhutan-roll-call-v4';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

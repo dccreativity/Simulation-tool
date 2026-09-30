@@ -3,7 +3,7 @@
 A phone app (installable web app) for the school trip to Bhutan, 01–07 Oct 2026. Six team in-charges take attendance; marks sync live between every teacher's phone and keep working offline. 70 students in 6 groups. Owner: Deepak Chaudhary.
 
 ## Layout
-- `site/` is the whole deployable app. Deploy only this folder to Netlify (`netlify deploy --dir=roll-call/site --prod`, or Netlify Drop). Keep the same Netlify site so the link doesn't change.
+- `site/` is the whole deployable app, hosted on Vercel: import the GitHub repo in Vercel with Root Directory `roll-call/site`, Framework Preset "Other", no build command. `site/vercel.json` stops the page and service worker being cached stale.
   - `index.html`: the app in one file (no build step). Design follows Deepak's template: hero dashboard, group list, student list with ✓/✗ circles, Save Attendance, Attendance Summary with day chips and donut, Absent Students, Switch Group sheet.
   - `sw.js`: offline cache. **Bump `CACHE` on every deploy.** Page is network-first, so phones pick up new deploys when online.
 - `supabase/roll_call_sync.sql`: the database (already applied to project `bhutan-roll-call`, ref `pbslzkivjowyakpttuau`, ap-south-1).
@@ -11,7 +11,7 @@ A phone app (installable web app) for the school trip to Bhutan, 01–07 Oct 202
 - `private/` (git-ignored, never deploy or commit): plain student list and trip code.
 
 ## What teachers do
-Open the link, type the trip code once, tap their group. Nothing else: no files, no list editing, no creating roll calls.
+Open the shared link `https://<site>/#code=<trip code>`: it unlocks by itself (the `#` part never reaches the server and is removed from the address bar). Then tap their group. No home-screen install needed. Nothing else: no files, no list editing, no creating roll calls.
 
 ## Roll calls (fixed, no setup)
 - One roll call per trip day, id `dYYYYMMDD` (from `TRIP.start` and `TRIP.days`).

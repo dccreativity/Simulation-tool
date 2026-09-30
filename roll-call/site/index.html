@@ -425,7 +425,7 @@ td.t.bad{color:var(--a)}
       '<label for="tripCode" class="sr">Trip code</label><input id="tripCode" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="BT26-XXXX-XXXX">' +
       (S.unlockMsg ? '<p class="msg' + (S.unlockBusy ? '' : ' bad') + '">' + esc(S.unlockMsg) + '</p>' : '') +
       '<button class="btn" data-act="unlock"' + (S.unlockBusy ? ' disabled' : '') + '>' + (S.unlockBusy ? 'Unlocking…' : 'Unlock') + '</button></section>' +
-      '<p class="note">On iPhone, add the app to your home screen first, then unlock inside the home-screen app.</p></div>';
+      '<p class="note">Tip: open the app using the full link the trip lead shared. It unlocks by itself.</p></div>';
   }
 
   function groupStatus(cid, t) {
@@ -604,9 +604,9 @@ td.t.bad{color:var(--a)}
   /* ---------- Unlock ---------- */
   function b64bytes(b64) { const bin = atob(b64); const out = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
   const hex = b => Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
-  async function unlock() {
+  async function unlock(fromLink) {
     const inp = document.getElementById('tripCode');
-    const raw = inp ? inp.value : '';
+    const raw = fromLink || (inp ? inp.value : '');
     const code = String(raw).toUpperCase().replace(/[^A-Z0-9]/g, '');
     if (!code) { S.unlockMsg = 'Type the trip code first.'; render(); return; }
     if (!(window.crypto && crypto.subtle)) { S.unlockMsg = 'This browser cannot unlock the list. Open the link in Chrome or Safari.'; render(); return; }
@@ -625,7 +625,7 @@ td.t.bad{color:var(--a)}
       const keep = D && D.salt === L.salt;
       D = { app: 'bhutan-roll-call', version: 2, salt: L.salt, teams: list.teams, marks: keep ? D.marks : {}, outbox: keep ? D.outbox : {}, lastSrv: keep ? D.lastSrv : 0, myTeam: keep ? D.myTeam : null };
       S.unlockBusy = false; S.unlockMsg = null; S.badKey = false;
-      save(); go('#/'); toast('Unlocked. Marks now sync with every teacher.');
+      save(); history.replaceState(null, '', location.pathname + location.search + '#/'); render(); toast('Unlocked. Marks now sync with every teacher.');
       syncNow();
     } catch (e) {
       S.unlockBusy = false; S.unlockMsg = 'That code did not work. Check it and try again.'; render();
@@ -687,6 +687,13 @@ td.t.bad{color:var(--a)}
 
   load();
   if (D && !SECRET) D = null;
+  // A shared link can carry the trip code (…/#code=BT26-XXXX-XXXX) so teachers never type it.
+  // The part after # never leaves the phone; it is removed from the address bar once used.
+  const linkCode = (location.hash.match(/^#code=([A-Za-z0-9-]+)/) || [])[1];
+  if (linkCode) {
+    if (D) history.replaceState(null, '', location.pathname + location.search + '#/');
+    else setTimeout(() => unlock(linkCode), 0);
+  }
   render();
   if (D) syncNow();
   if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
