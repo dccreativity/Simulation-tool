@@ -1,114 +1,137 @@
-# Quadrat &amp; Transect Lab
+# Eco Field Lab
 
-A browser simulation of the two sampling methods biology and environmental science
-students are taught for measuring the **distribution** and **abundance** of organisms:
-**random quadrats** and **transects**.
+**Real Data. Real Decisions. Healthier Planets.**
 
-The point of the tool is the thing real fieldwork can never offer: the habitat has a
-known, fixed population, so a student can sample it, scale their sample up to a
-population estimate, and then see exactly how far off they were — and why.
+An interactive ecology and statistics lab for secondary, IB and Cambridge students.
+Students either sample simulated ecosystems with quadrats and transects, or bring their own
+data, and then follow the same path every ecologist does:
 
-No build step, no dependencies, no network calls. Open `index.html` and it runs.
+**Field → Data → Analysis → Evidence → Conclusion**
 
 ## What it does
 
-**A generated habitat with a real population.** Each of the five habitats is built from
-density and cover functions over a 20 m × 20 m site. Countable species are generated as
-individuals; carpet species (grass, moss, seaweed) as a cover field realised in plant
-units. Everything comes from the site code typed into the page, so a whole class
-entering `HEDGE-07` samples the identical site.
+### Simulation mode
+- **Eight ecosystems**: grassland, woodland, pond, coastal (rocky shore), desert, wetland,
+  urban park and tropical forest. Each has a research question (mission), hypothesis,
+  habitat zones and 5–7 species.
+- **A real population, not canned numbers.** Each site is an environmental model (water,
+  paths, canopy shade, shore height, road edges) and species densities respond to it, with
+  clumping and competitive spacing. Thousands of individual organisms are generated from a
+  **site code**, so a whole class can sample the same site, and every sampling choice changes
+  the data.
+- **Quadrats** (0.25–2 m) placed at random, on a systematic grid, stratified by zone, or by
+  hand. **Line transects** record individuals touching the tape; **belt transects** count
+  individuals in each section of a strip.
+- **Sampling-bias detection.** Because the true population is known, the lab tests whether
+  the sample positions favour dense or sparse areas or are bunched together, and shows
+  *actual population vs your sample* side by side.
+- Pan / zoom / pinch field map with zones and a "true density" layer, keyboard operable.
 
-| Habitat | What it teaches |
-| --- | --- |
-| Oak tree in a meadow | Grass thins in shade, moss replaces it — a gradient running outward from the trunk |
-| Footpath across a field | The classic transect: bare path, plantain on the trampled edge, daisies in short turf |
-| Rocky shore, low to high water | Zonation — three wracks in bands, with limpets grazing the mid and lower shore |
-| Mown lawn | A control with no gradient and no clumping: does random sampling recover the truth? |
-| Thistles in rough grassland | A strongly clumped species, where ten quadrats are nowhere near enough |
+### My Data mode
+Paste simple values, two groups or a frequency table (auto-detected), import CSV, or load
+example data — then go straight to statistics. No simulation needed.
 
-**Three ways to place a quadrat.**
+### Data Lab
+Editable tables for quadrat, line-transect, belt-transect and custom data: add, delete and
+duplicate rows, typed columns, invalid-value highlighting, CSV import/export.
 
-- *Random quadrats* — two tape measures at right angles, a random number generator for
-  the coordinates, the frame's bottom-left corner on the pair it produces.
-- *Belt transect* — quadrats at fixed intervals along a line (an interrupted belt
-  transect), which is systematic sampling, not random.
-- *My own spots* — click wherever looks interesting. This is the wrong method, included
-  so the bias it produces can be measured rather than just asserted.
+### Statistics Lab
+- Descriptive statistics: mean, median, all modes, range, standard deviation, n, quartiles,
+  standard error — with live editing and an SD visualisation.
+- Guided **t-test** (Student's or Welch's, one- or two-tailed, α = 0.05 / 0.01 / 0.10).
+- **Chi-squared** goodness of fit (editable expected ratios) and species association from
+  quadrat presence/absence.
+- "**Which test should I use?**" reasoning pathway.
 
-**Recording by hand.** The frame is strung into a 5 × 5 grid, so each small square is 4%.
-Click individuals to tick them off, or click the small squares a species more than half
-fills. *Check my count* compares your answer with the frame's real contents, including
-what the half-square rule gives versus the true cover. An auto-fill button exists for
-demonstrating and for getting quickly to the analysis.
+**Conventions:** SD is the *sample* SD (÷ n − 1) by default (the population SD is one click
+away); quartiles use linear interpolation (QUARTILE.INC); no continuity correction in
+chi-squared. Interpretations never claim proof or causation and separate statistical from
+biological significance. All statistics are implemented in TypeScript and checked against
+SciPy in the unit tests.
 
-**The arithmetic, shown.** Mean per quadrat, the number of quadrats in the site, the
-population estimate, standard deviation, species richness, Simpson's index of diversity,
-and the ACFOR band on the shore. Every step is written out with the numbers substituted,
-not just the answer.
+### Field Notebook, achievements, accounts
+Save investigations (question, hypothesis, method, data, statistics, tests, charts,
+conclusion, limitations); print to PDF or export Markdown/CSV. Mature achievements build a
+"scientific reputation". Accounts are optional — guests can use everything and their work is
+saved on the device; signing in syncs the notebook to Supabase.
 
-**Charts.** Spread between quadrats, the running estimate as quadrats accumulate,
-abundance against distance along the transect, and a kite diagram.
+The original **Quadrat & Transect Lab** (hand-counting practice and repeated-survey
+experiments) is kept as a static page at `/quadrat-lab/index.html`.
 
-**An Investigate tab** that repeats the entire survey 300 times at every sample size
-from 1 to 30 quadrats, for three placement strategies, and reports how many quadrats it
-actually takes to land within 10% of the truth — and that choosing by eye narrows in on
-the *wrong* answer.
+## Technology
 
-## Is the simulation honest?
+Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion · Recharts · Zustand ·
+Supabase (Postgres, Auth, Row Level Security) · Lucide icons · Vitest · Playwright.
 
-It is only worth using if sampling it gives the same answers that sampling a real
-population would, so two things were checked rather than assumed:
-
-- **The estimator is unbiased.** The possible quadrat positions tile the site exactly, so
-  every organism belongs to one and only one possible quadrat. Summing the true count
-  over all 1,600 positions of a 0.5 m frame returns the population exactly, and 4,000
-  simulated 10-quadrat surveys recover the true value to within Monte Carlo error for
-  every species in every habitat. (Reading whole-metre coordinates with a half-metre
-  frame would have made half of every metre strip unsamplable — hence the coordinates
-  are read in frame-widths, which is also why a 1 m frame gives the whole numbers of
-  the textbook method.)
-- **The cover that is drawn is the cover that is measured.** Percentage cover is measured
-  off the plant units actually rendered inside the frame, not from the function that
-  generated them. Because union cover of overlapping discs depends on E[r²] rather than
-  E[r]², the unit density is corrected for the spread of plant sizes; without that
-  correction measured cover ran about 2.6% high.
-
-Species colours are drawn from a palette validated for colour-blind separation in both
-light and dark themes, and each species also carries its own glyph, so identity never
-rests on colour alone.
-
-## Files
-
-```
-index.html             the page
-styles.css             tokens and layout, light and dark
-js/rng.js              seeded randomness, Poisson deviates, value noise
-js/scenarios.js        the five habitats: density and cover functions per species
-js/site.js             generates the habitat and measures the truth inside a quadrat
-js/render.js           site map with tape measures, quadrat close-up, glyphs
-js/charts.js           SVG charts
-js/app.js              state, interaction, calculations
-tools/build-artifact.js strips the standalone wrapper for publishing as an Artifact
-```
-
-## Running it
-
-Open `index.html` directly, or serve the folder:
+## Local setup
 
 ```sh
-npx http-server -p 8099 .
+npm install
+cp .env.example .env.local   # then fill in your Supabase URL and publishable key
+npm run dev                  # http://localhost:3000
 ```
 
-A static host works as-is — there is no server side. The only external request is the
-Google Fonts stylesheet; the page falls back to system fonts without it.
+The app runs without Supabase variables too: everything works in guest mode and saves to the
+browser.
 
-## Notes for teaching
+### Environment variables
 
-- The record sheet exports as CSV for a spreadsheet or lab book, and the page has a
-  print stylesheet that drops the controls and keeps the sheet.
-- *Reveal the true values* is a teacher switch: it shows the answer in the tally, the
-  record sheet and the charts.
-- The lawn habitat is the one to start with for "does random sampling work?", and the
-  thistle habitat for "how many quadrats do we need?".
-- On the lawn, a transect correctly shows a flat profile. That is the lesson, not a bug:
-  with no gradient there is nothing for a transect to find, so use random quadrats.
+| Variable | Where | Notes |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | browser | Project URL, e.g. `https://<ref>.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | browser | Publishable (`sb_publishable_…`) or legacy anon key |
+
+Both are public by design; Row Level Security protects user data. **No service-role key is
+used or needed.** Never commit `.env.local`.
+
+## Supabase
+
+1. Create a project.
+2. Run `supabase/migrations/20260925000100_init_schema.sql`, then `supabase/seed/seed.sql`
+   (SQL editor, or `supabase db push` with the CLI).
+3. *Authentication → URL configuration*: set the **Site URL** to your deployed URL and add
+   `https://<your-domain>/auth` to the redirect allow list, so email-confirmation links
+   return to the app.
+4. Optional: run `supabase/tests/rls_isolation_check.sql` — every row should say
+   `passed = true`.
+
+Tables: `profiles`, `ecosystems`, `missions`, `achievements` (public catalogue), and the
+user-owned `investigations`, `datasets`, `dataset_rows`, `analyses`, `notebook_entries`,
+`user_achievements`. Simulation state is not stored — sites are reconstructed from the
+ecosystem and site code.
+
+## Commands
+
+| Command | |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` / `npm start` | Production build / server |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript |
+| `npm test` | Unit tests (statistics vs SciPy, simulation engine, bias detection) |
+| `npm run test:e2e` | Playwright on desktop, tablet and phone (run `npm run build` first; set `PLAYWRIGHT_CHROMIUM_PATH` to use a system Chromium) |
+
+## Deployment (GitHub → Vercel → Supabase)
+
+1. Import the GitHub repository in Vercel (framework preset: Next.js; defaults are fine).
+2. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for Production
+   and Preview.
+3. Set the production branch, deploy, then add the production URL to Supabase's Site URL and
+   redirect list (step 3 above).
+
+## Project structure
+
+```
+app/                 routes (home, explore, simulation, my-data, data-lab, statistics, notebook, achievements, auth)
+components/          ui, navigation, layout, ecosystem, sampling, data, statistics, charts, notebook, providers
+data/                ecosystem definitions, missions, achievements
+lib/statistics       descriptive stats, distributions, t-test, chi-squared, interpretation
+lib/simulation       seeded generation, spatial index, rendering, palette
+lib/sampling         quadrats, transects, location strategies, bias detection
+lib/data             datasets, parsing, CSV, examples
+lib/store            local-first Zustand stores
+lib/supabase         client and sync
+supabase/            migrations, seed, RLS check
+tests/               unit (Vitest) and e2e (Playwright)
+public/quadrat-lab/  the original Quadrat & Transect Lab
+```

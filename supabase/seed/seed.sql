@@ -1,0 +1,35 @@
+-- Eco Field Lab catalogue seed. Generated from data/ecosystems and data/achievements.
+-- Safe to re-run: existing rows are updated in place.
+
+insert into public.ecosystems (id, name, tagline, description, methods, sort_order) values
+  ('grassland', 'Grassland', 'Plant abundance', 'A hay meadow crossed by a well-used footpath and bordered by a stream. Trampling, soil moisture and patchy clover create gradients you can measure.', array['quadrat', 'line-transect', 'belt-transect']::text[], 1),
+  ('woodland', 'Woodland', 'Tree saplings', 'Mature oak and beech woodland around a sunny clearing left by a fallen tree. Light, not space, limits what grows on the woodland floor.', array['quadrat', 'line-transect', 'belt-transect']::text[], 2),
+  ('pond', 'Pond', 'Aquatic plants', 'A lowland pond with a reed-fringed margin grading into damp bank and dry grassland. Water depth and soil moisture sort the plants into bands.', array['quadrat', 'line-transect', 'belt-transect']::text[], 3),
+  ('coastal', 'Coastal', 'Rocky shore', 'A rocky shore from the low-water mark up to the splash zone. Time out of water sets the limits of each species, producing clear bands — zonation.', array['line-transect', 'belt-transect']::text[], 4),
+  ('desert', 'Desert', 'Sparse vegetation', 'Semi-arid scrub where water is the limiting factor. A dry wash channels rare rain, and competition for water spaces the shrubs out evenly.', array['quadrat', 'line-transect']::text[], 5),
+  ('wetland', 'Wetland', 'Biodiversity', 'A lowland marsh drained by slow channels and dotted with pools. Waterlogging decides which specialists can survive, and diversity peaks at the wet margins.', array['quadrat', 'line-transect', 'belt-transect']::text[], 6),
+  ('urban-park', 'Urban Park', 'Disturbance impact', 'A mown city park bordered by a busy road and crossed by paths. Trampling, shade and pollution from the road create strong edge effects.', array['quadrat', 'line-transect', 'belt-transect']::text[], 7),
+  ('tropical-forest', 'Tropical Forest', 'High diversity', 'Lowland rainforest with a treefall gap and a clear stream. Many species share the understorey, each specialised for a different light level.', array['quadrat', 'line-transect', 'belt-transect']::text[], 8)
+on conflict (id) do update set name = excluded.name, tagline = excluded.tagline, description = excluded.description, methods = excluded.methods, sort_order = excluded.sort_order;
+
+insert into public.missions (id, ecosystem_id, title, question, hypothesis, null_hypothesis, focal_species, recommended_methods, sort_order) values
+  ('grassland-trampling', 'grassland', 'Trampling and daisies', 'Does trampling along the footpath reduce the abundance of daisies?', 'Daisies will be less abundant on the trampled path than in the open meadow.', 'There is no difference in mean daisy abundance between the trampled path and the open meadow.', 'daisy', array['quadrat', 'belt-transect']::text[], 1),
+  ('woodland-light', 'woodland', 'Life under the canopy', 'Is the abundance of bluebells different under the closed canopy compared with the clearing?', 'Bluebells will be more abundant under the closed canopy than in the clearing.', 'There is no difference in mean bluebell abundance between the closed canopy and the clearing.', 'bluebell', array['quadrat', 'belt-transect']::text[], 2),
+  ('pond-gradient', 'pond', 'From water to dry land', 'How does the abundance of common reed change with distance from the water’s edge?', 'Common reed will be most abundant in the shallow margin and decline with distance onto the bank.', 'There is no difference in mean reed abundance between the shallow margin and the damp bank.', 'reed', array['belt-transect', 'line-transect', 'quadrat']::text[], 3),
+  ('coastal-zonation', 'coastal', 'Zonation on the shore', 'How does the distribution of limpets and seaweeds change from low water to the top of the shore?', 'Limpet abundance will be greater on the middle shore than on the upper shore.', 'There is no difference in mean limpet abundance between the middle and upper shore.', 'limpet', array['belt-transect', 'line-transect']::text[], 4),
+  ('desert-wash', 'desert', 'Water in a dry land', 'Is big galleta grass more abundant in the dry wash than on the sandy flats?', 'Galleta grass will be more abundant in the dry wash than on the sandy flats.', 'There is no difference in mean galleta abundance between the wash and the sandy flats.', 'galleta', array['quadrat', 'line-transect']::text[], 5),
+  ('wetland-diversity', 'wetland', 'Wet feet', 'Is soft rush more abundant on the wet margins than on drier ground?', 'Soft rush will be more abundant on the wet margin than on drier ground.', 'There is no difference in mean soft rush abundance between the wet margin and drier ground.', 'soft-rush', array['quadrat', 'belt-transect']::text[], 6),
+  ('park-edge', 'urban-park', 'The edge effect', 'Is daisy abundance lower near the road edge than in the open lawn?', 'Daisies will be less abundant within 4 m of the road than in the open lawn.', 'There is no difference in mean daisy abundance between the road edge and the open lawn.', 'daisy', array['quadrat', 'belt-transect']::text[], 7),
+  ('tropical-gap', 'tropical-forest', 'A gap in the canopy', 'Is heliconia more abundant in the treefall gap than in the shaded understorey?', 'Heliconia will be more abundant in the treefall gap than in the shaded understorey.', 'There is no difference in mean heliconia abundance between the gap and the understorey.', 'heliconia', array['quadrat', 'belt-transect']::text[], 8)
+on conflict (id) do update set ecosystem_id = excluded.ecosystem_id, title = excluded.title, question = excluded.question, hypothesis = excluded.hypothesis, null_hypothesis = excluded.null_hypothesis, focal_species = excluded.focal_species, recommended_methods = excluded.recommended_methods, sort_order = excluded.sort_order;
+
+insert into public.achievements (id, title, description, points, sort_order) values
+  ('random-sampling-specialist', 'Random Sampling Specialist', 'Collect 10 or more random quadrats in one site without a bias warning.', 20, 1),
+  ('bias-aware', 'Bias Aware', 'Receive a sampling-bias warning, then resample until the warning clears.', 25, 2),
+  ('transect-explorer', 'Transect Explorer', 'Complete both a line transect and a belt transect.', 20, 3),
+  ('field-ecologist', 'Field Ecologist', 'Collect samples in three different ecosystems.', 30, 4),
+  ('data-detective', 'Data Detective', 'Enter or import your own data and analyse it in My Data mode.', 15, 5),
+  ('outlier-hunter', 'Outlier Hunter', 'Spot an outlier beyond the whiskers of a box plot.', 15, 6),
+  ('statistical-investigator', 'Statistical Investigator', 'Run both a t-test and a chi-squared test.', 30, 7),
+  ('evidence-defender', 'Evidence Defender', 'Save a notebook entry that includes a conclusion and its limitations.', 25, 8)
+on conflict (id) do update set title = excluded.title, description = excluded.description, points = excluded.points, sort_order = excluded.sort_order;
