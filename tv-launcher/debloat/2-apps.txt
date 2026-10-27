@@ -1,0 +1,4 @@
+# Lumio Arc 5: apps the owner does not use. Disabled, never uninstalled.
+# Undo: TV_HOST=<tv ip> $CLEANYOURTV/tools/restore.sh tv-launcher/debloat/2-apps.txt com.google.android.apps.tv.launcherx
+com.discoveryplus.tv.android     # Discovery+
+com.mxtech.videoplayer.television  # MX Player

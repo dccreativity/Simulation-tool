@@ -1,0 +1,12 @@
+# Lumio Arc 5 (SDMC, device himalaya, MediaTek), Google TV / Android 11 (SDK 30), build RTMA.250416.128
+# Batch 1: ads, tracking and preloaded junk. Disabled, never uninstalled.
+# Undo: TV_HOST=<tv ip> $CLEANYOURTV/tools/restore.sh tv-launcher/debloat/1-ads-tracking.txt com.google.android.apps.tv.launcherx
+android.autoinstalls.config.google.gtvpai                 # silently installs partner apps
+com.google.android.partnersetup                           # partner-app attribution
+com.mediatek.android.leanbacklauncher.partnercustomizer   # partner/ad rows for the stock launcher
+com.google.android.feedback                               # "send feedback" reporter
+com.google.android.apps.nbu.smartconnect.tv               # data-saver VPN
+fusion.android.tv.demo                                    # shop demo mode
+com.mstar.android.tv.disclaimercustomization              # retail disclaimer pop-ups
+com.android.dynsystem                                     # Dynamic System Updates (GSI loader)
+com.google.android.sss.authbridge                         # set-up-from-phone helper

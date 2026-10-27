@@ -66,6 +66,7 @@ final class Apps {
         List<Entry> out = new ArrayList<>();
         for (Map.Entry<String, ActivityInfo> e : found.entrySet()) {
             String pkg = e.getKey();
+            if (factory(pkg)) continue;
             ActivityInfo ai = e.getValue();
             Intent launch = launchIntent(pm, pkg);
             if (launch == null) continue;
@@ -119,6 +120,17 @@ final class Apps {
         } catch (RuntimeException e) {
             return 0xFF2A3550;
         }
+    }
+
+    /**
+     * Factory and test tools (com.sdmc.keyburn on the Lumio Arc 5, mediatek.factorymenu.ui, com.cvte.tv.hkcfac
+     * and the like) are never listed: on some boards just opening one flips a factory-mode flag the shell
+     * cannot undo.
+     */
+    static boolean factory(String pkg) {
+        String p = pkg.toLowerCase(Locale.ROOT);
+        return p.contains("factory") || p.contains("keyburn") || p.contains("fac.menu") || p.contains("hkcfac")
+                || p.startsWith("com.at.factory");
     }
 
     static boolean hidden(String pkg) {

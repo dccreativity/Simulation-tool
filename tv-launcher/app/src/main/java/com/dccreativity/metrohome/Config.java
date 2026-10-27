@@ -20,10 +20,10 @@ final class Config {
             "com.google.android.youtube.tv",          // YouTube
             "com.netflix.ninja",                      // Netflix
             "com.amazon.amazonvideo.livingroom",      // Prime Video
-            "com.disney.disneyplus",                  // Disney+
+            "in.startv.hotstar",                      // JioHotstar
             "com.sonyliv",                            // Sony LIV
-            "com.jio.media.stb.ondemand",             // JioCinema
-            "in.startv.hotstar",                      // Hotstar
+            "com.graymatrix.did",                     // ZEE5
+            "com.crunchyroll.crunchyroid",            // Crunchyroll
             "com.spotify.tv.android",                 // Spotify
             "com.apple.atve.androidtv.appletv",       // Apple TV
     };
@@ -36,24 +36,23 @@ final class Config {
             {"com.google.android.youtube.tv", "#E01E1E"},
             {"com.netflix.ninja", "#000000"},
             {"com.amazon.amazonvideo.livingroom", "#1AA3E0"},
-            {"com.disney.disneyplus", "#0B1F4F"},
-            {"com.sonyliv", "#4C1FAE"},
-            {"com.jio.media.stb.ondemand", "#D8157D"},
             {"in.startv.hotstar", "#0F1D36"},
+            {"com.sonyliv", "#4C1FAE"},
+            {"com.graymatrix.did", "#2A1A3E"},
+            {"com.crunchyroll.crunchyroid", "#F47521"},
             {"com.spotify.tv.android", "#1DB954"},
             {"com.apple.atve.androidtv.appletv", "#151515"},
     };
 
     /**
-     * The tuner / Live TV app. com.realtek.tv is what the Lumio Vision 7 uses (same maker, KTC); confirm it
-     * on the Arc 5 with: tools/tv.py "pm list packages | grep -i -E 'realtek|tv'". If it is not installed,
-     * Live TV opens the Inputs list instead.
+     * The tuner / Live TV app: MediaTek's TV center on the Lumio Arc 5 (SDMC, MediaTek). If it is not
+     * installed, Live TV opens the Inputs list instead.
      */
-    static final String LIVE_TV_PACKAGE = "com.realtek.tv";
+    static final String LIVE_TV_PACKAGE = "com.mediatek.wwtv.tvcenter";
 
     /** Sidebar and bottom-bar shortcuts: the first installed app of each list opens. */
-    static final String[] MOVIES_APPS = {"com.amazon.amazonvideo.livingroom", "com.netflix.ninja", "com.disney.disneyplus"};
-    static final String[] TV_SHOWS_APPS = {"com.netflix.ninja", "com.jio.media.stb.ondemand", "com.sonyliv"};
+    static final String[] MOVIES_APPS = {"com.amazon.amazonvideo.livingroom", "com.netflix.ninja", "in.startv.hotstar"};
+    static final String[] TV_SHOWS_APPS = {"in.startv.hotstar", "com.sonyliv", "com.netflix.ninja"};
     static final String[] LIBRARY_APPS = {"com.android.vending"};
 
     /** Never shown as a tile (the Live TV entry and the Inputs list already cover the tuner app). */
