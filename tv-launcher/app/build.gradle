@@ -1,0 +1,33 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.dccreativity.metrohome'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.dccreativity.metrohome'
+        // Android 8.0. The Lumio sets run Google TV 14 (SDK 34); build-and-install.sh checks the TV first.
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            // Sideloaded over ADB, never published: the debug key lets it install over a debug build.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+// No dependencies: plain framework views only, so the APK stays small and needs nothing beyond the SDK.
