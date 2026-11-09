@@ -1,0 +1,6 @@
+# Haier MatrixTV EE (omonia), Google TV 14, UKN4.250714.105.
+# Batch 4: Google TV's setup wizard. Its RecoveryActivity claims HOME at priority 1 and takes over once launcherx
+# is disabled, so it goes first, while launcherx still owns Home. It owned the Wi-Fi network in use from first setup;
+# the owner forgot and re-joined that network in Settings first, so it became android.uid.system.
+# May break Chromecast (mediashell reads device info from it). Never re-enable it alone while another launcher is Home.
+com.google.android.tungsten.setupwraith
