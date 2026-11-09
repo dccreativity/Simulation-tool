@@ -1,0 +1,21 @@
+{
+  "dock_apps": [
+    "com.netflix.ninja",
+    "com.google.android.youtube.tv",
+    "com.amazon.amazonvideo.livingroom",
+    "in.startv.hotstar",
+    "com.sonyliv",
+    "com.graymatrix.did"
+  ],
+  "columns": 6,
+  "live_tv_package": "com.cltv.hybrid",
+  "background_color": "#090C14",
+  "wallpaper": true,
+  "cinematic_home": true,
+  "dock_glass": true,
+  "icon_only_buttons": true,
+  "app_glow": true,
+  "glow_style": "horizon",
+  "focus_overshoot": false,
+  "advanced_effects": true
+}

@@ -1,0 +1,9 @@
+# Haier MatrixTV EE (device omonia, MediaTek), Google TV 14 (API 34), firmware UKN4.250714.105.
+# Based on cleanyourtv examples/aqua-matrixtv-ee-50 (same board, UKN7 firmware). Disabled, never uninstalled.
+# Batch 2: telemetry, content recognition, partner rows, retail demo, partner auto-installs.
+# Undo: TV_HOST=<tv ip> $CLEANYOURTV/tools/restore.sh <this file> com.google.android.apps.tv.launcherx
+com.google.android.feedback                      # Google usage feedback
+tv.anoki.acr.controller                          # Anoki automatic content recognition (ACR); Live TV is com.cltv.hybrid, separate
+com.mediatek.tv.launcher.partner                 # partner rows on the stock home
+com.mediatek.tv.retaildemo                       # retail demo mode
+android.autoinstalls.config.google.gtvpai        # silently installs partner apps

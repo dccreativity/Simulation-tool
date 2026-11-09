@@ -1,0 +1,11 @@
+# Haier MatrixTV EE (device omonia, MediaTek), Google TV 14 (API 34), firmware UKN4.250714.105.
+# Based on cleanyourtv examples/aqua-matrixtv-ee-50 (same board, UKN7 firmware). Disabled, never uninstalled.
+# Batch 1: Haier content, IoT, cleaner, e-manual.
+# Undo: TV_HOST=<tv ip> $CLEANYOURTV/tools/restore.sh <this file> com.google.android.apps.tv.launcherx
+com.haierubic.usmartdevice                       # Haier smart-device / IoT service
+it.hon.service                                   # Haier hOn IoT service
+com.haier.apps                                   # Haier promo content app
+com.haier.tvhousekeeper                          # "TV housekeeper" cleaner
+com.haier.emanual9603                            # e-manual
+com.haier.oemtabprovider                         # the "Haier" tab on the Google TV home
+com.haier.launcher.haiermatrix                   # Zeasn content launcher, not the system Home

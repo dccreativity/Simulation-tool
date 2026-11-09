@@ -1,0 +1,4 @@
+# Haier MatrixTV EE (device omonia, MediaTek), Google TV 14 (API 34), firmware UKN4.250714.105.
+# Based on cleanyourtv examples/aqua-matrixtv-ee-50 (same board, UKN7 firmware). Disabled, never uninstalled.
+# Batch 3: apps the owner does not use.
+com.plexapp.android                              # Plex
